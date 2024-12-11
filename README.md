@@ -26,5 +26,15 @@ The datasets used for this project are not included in the repository. However, 
       
 ## Results and Figures
 
+The specific results of our experiments can be found in our paper. To summarize, topological features enhanced the performance of baseline models in all the datasets we used.
+
+### Accuracy Comparison of Different Models
+![RareBloodDiseaseAccuracyPlot](https://github.com/user-attachments/assets/c857c54d-b20a-4faa-8444-8632f895b601)
+
+
+### AUC Comparison of Different Models 
+![RareBloodDiseaseAUCPlot](https://github.com/user-attachments/assets/dab48593-0278-458d-8072-54e8ca5767e9)
+
+
 ## Acknowledgements 
 * We would like to thank the authors of the [datasets](#data) for their time and effort in developing these valuable resources
