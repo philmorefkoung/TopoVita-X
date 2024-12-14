@@ -11,7 +11,7 @@ Our project explores the application of topological methods to improve biomedica
 
 
 ## Installation
-
+To run the models, please download the datasets we used from [Zenodo](https://zenodo.org/records/14474907?token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6IjBhYWMwYzY0LTQyZGEtNDQwMy04MTk2LTJjOTI4YzMyN2QzYSIsImRhdGEiOnt9LCJyYW5kb20iOiI4MTNiM2Q3Y2RmZDdlMjcxZTJlMDA0ODY1ZjhhN2ZmMCJ9.zYRSnDcx8W8UIAioiWtr6n4kBi0_hbFoTCf51sV0ENvBe9DMDr5TpVELOgnwpj0tnOVdnMZe-DFT6heFxOk18A). To access the ALL-IDB2 dataset please request access from the creators [here](https://scotti.di.unimi.it/all/). Each .npz file contains an 'images' array containing the pixel values of each image and 'labels' array containing the class of each image (0 for normal, 1 for abnormal). The AML .npz contains an extra array 'binary_labels' to classify normal images from abormal for binary classification. Each .csv contains the 400-dimensional betti vector for each image. After downloading the files, please download the required dependencies as mentioned in the requirements.txt. 
 
 ## Usage
 
