@@ -108,7 +108,7 @@ lr_scheduler = tf.keras.callbacks.LearningRateScheduler(custom_lr_schedule)
 
 # Compile model
 model.compile(
-    optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
+    optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),
     loss='categorical_crossentropy',
     metrics=['accuracy', AUC(name='auc'), Precision(name='precision'), Recall(name='recall')]
 )
