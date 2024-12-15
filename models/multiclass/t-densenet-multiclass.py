@@ -22,7 +22,7 @@ batch_size = 128
 
 # Shuffle and batch the datasets
 train_dataset = train_dataset.shuffle(buffer_size=1024).batch(batch_size)
-val_dataset = test_dataset.batch(batch_size)
+val_dataset = val_dataset.batch(batch_size)
 test_dataset = test_dataset.batch(batch_size)
 
 # Load model
