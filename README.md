@@ -4,14 +4,18 @@ Code for the paper Topological Deep Learning for Enhanced Diagnosis of Blood Dis
 Our project explores the application of topological methods to improve biomedical image classification of rare blood disorders. We utilize topological data analysis in the form of Betti vectors to create more robust and accurate models to classify these disorders. <br /> 
 
 ## Table of Contents
-
+* [Installation](#installation)
+* [Usage](#usage)
+* [Data](#data)
+* [Results](#results)
+* [Acknowledgements](#acknowledgements)
 
 
 
 
 
 ## Installation
-To run the models, please download the datasets we used from [Zenodo](https://zenodo.org/records/14474907?token=eyJhbGciOiJIUzUxMiJ9.eyJpZCI6IjBhYWMwYzY0LTQyZGEtNDQwMy04MTk2LTJjOTI4YzMyN2QzYSIsImRhdGEiOnt9LCJyYW5kb20iOiI4MTNiM2Q3Y2RmZDdlMjcxZTJlMDA0ODY1ZjhhN2ZmMCJ9.zYRSnDcx8W8UIAioiWtr6n4kBi0_hbFoTCf51sV0ENvBe9DMDr5TpVELOgnwpj0tnOVdnMZe-DFT6heFxOk18A). To access the ALL-IDB2 dataset please request access from the creators [here](https://scotti.di.unimi.it/all/). Each .npz file contains an 'images' array containing the pixel values of each image and 'labels' array containing the class of each image (0 for normal, 1 for abnormal). The AML .npz contains an extra array 'binary_labels' to classify normal images from abormal for binary classification. Each .csv contains the 400-dimensional betti vector for each image. After downloading the files, please download the required dependencies as mentioned in the requirements.txt. 
+Please refer to the requirements.txt file to install the dependencies
 
 ## Usage
 Provided below is an example to load the data: <br />
@@ -31,17 +35,20 @@ labels_train = np.load('babesia-train.npz')['labels']
 labels_val = np.load('babesia-val.npz')['labels']
 labels_test = np.load('babesia-test.npz')['labels']
 ```
+Betti vectors should be provided in csv format and 400 dimensional in length <br />
+Image data and lables should be stored in an npz with 'images' and 'labels' array 
 
 
 
 ## Data
-The links to the original datasets can be found below: <br />
+Due to file size limitations and licensing issues, we cannot provide the datasets in this repository. However, the links to the original datasets can be found below: <br />
 * [ALL](https://scotti.di.unimi.it/all/#)
 * [AML](https://www.cancerimagingarchive.net/collection/aml-cytomorphology_mll_helmholtz/)
 * [Malaria](https://lhncbc.nlm.nih.gov/LHC-downloads/downloads.html#malaria-datasets)
-* [NIAID](https://data.niaid.nih.gov/resources?id=mendeley_38jtn4nzs6)
-      
-## Results and Figures
+* [NIAID](https://data.niaid.nih.gov/resources?id=mendeley_38jtn4nzs6) <br />
+
+Please note that only the ALL-IDB2 dataset requires permissions to access 
+## Results
 
 The specific results of our experiments can be found in our paper. To summarize, topological features enhanced the performance of baseline models in all the datasets we used.
 
