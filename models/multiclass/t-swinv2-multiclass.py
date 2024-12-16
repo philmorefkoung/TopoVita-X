@@ -117,7 +117,7 @@ class HybridDataset(Dataset):
         if self.transform:
             image = self.transform(image)
             
-        return image, torch.tensor(feature, dtype=torch.float32), torch.tensor(label, dtype=torch.long)  # Convert label to float
+        return image, torch.tensor(feature, dtype=torch.float32), torch.tensor(label, dtype=torch.long)  # Convert to long
 
 def load_presplit_data(train_npz, val_npz, test_npz, 
                       train_csv, val_csv, test_csv, 
