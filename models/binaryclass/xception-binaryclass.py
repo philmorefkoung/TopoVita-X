@@ -17,7 +17,7 @@ train_dataset = train_dataset.shuffle(buffer_size=1024).batch(batch_size)
 val_dataset = val_dataset.batch(batch_size)
 test_dataset = test_dataset.batch(batch_size)
 
-# Load the ResNet-50 model
+# Load model
 base_model = tf.keras.applications.Xception(
     weights= 'imagenet',  # Pre-trained for full datasets, 'None' for limited data settings
     include_top=False,  
