@@ -43,7 +43,7 @@ Image data and lables should be stored in an npz with 'images' and 'labels' arra
 ## Data
 Due to file size limitations, we cannot provide the datasets in this repository. However, the links to the original datasets can be found below: <br />
 * [ALL](https://scotti.di.unimi.it/all/#)
-* [AML](https://www.cancerimagingarchive.net/collection/aml-cytomorphology_mll_helmholtz/)
+* [AML](https://www.cancerimagingarchive.net/collection/aml-cytomorphology_lmu/)
 * [Malaria](https://lhncbc.nlm.nih.gov/LHC-downloads/downloads.html#malaria-datasets)
 * [NIAID](https://data.niaid.nih.gov/resources?id=mendeley_38jtn4nzs6) <br />
 
