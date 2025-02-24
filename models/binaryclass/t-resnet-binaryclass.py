@@ -102,7 +102,7 @@ lr_scheduler = tf.keras.callbacks.LearningRateScheduler(custom_lr_schedule)
 model.compile(
     optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),
     loss='binary_crossentropy',
-    metrics=['accuracy', AUC(name='auc'), Precision(name='precision'), Recall(name='recall')]
+    metrics=['accuracy','AUC', 'Precision', 'Recall']
 )
 
 early_stop = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=5, mode='min', restore_best_weights=True)
