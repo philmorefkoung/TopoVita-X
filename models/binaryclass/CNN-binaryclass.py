@@ -18,7 +18,7 @@ val_dataset = val_dataset.batch(batch_size)
 test_dataset = test_dataset.batch(batch_size)
 
 # Load the model
-base_model = tf.keras.applications.ResNet50(
+base_model = tf.keras.applications.ResNet50( # Swap between DenseNet121 and Xception
     weights= 'imagenet',  # Pre-trained for full datasets, 'None' for limited data setting
     include_top=False,  
     input_shape=(128, 128, 3) # 128x128 for all datasets except ALL-IDB2 which is preprocessed to 224x224
