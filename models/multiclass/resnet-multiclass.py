@@ -4,7 +4,7 @@ import tensorflow as tf
 from tensorflow.keras import layers
 from tensorflow.keras.utils import to_categorical
 
-num_classes = 3 # 3 for NIAID, 5 for AML multiclass
+num_classes = 3 # 3 for NIAID
 
 labels_train = to_categorical(labels_train, num_classes=num_classes) 
 labels_val = to_categorical(labels_val, num_classes=num_classes)
@@ -24,7 +24,7 @@ val_dataset = val_dataset.batch(batch_size)
 test_dataset = test_dataset.batch(batch_size)
 
 # Load the model
-base_model = tf.keras.applications.ResNet50(
+base_model = tf.keras.applications.ResNet50( # Swap between DenseNet121 and Xception
     weights= 'imagenet',  # Pre-trained for full datasets, 'None' for limited data settings
     include_top=False, 
     input_shape=(128, 128, 3) # 128x128 for all datasets, ALLIDB2 is not a multiclass task
@@ -74,7 +74,7 @@ lr_scheduler = tf.keras.callbacks.LearningRateScheduler(custom_lr_schedule)
 
 # Compile model
 model.compile(
-    optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
+    optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),
     loss='categorical_crossentropy',
     metrics=['accuracy','AUC', 'Precision', 'Recall']
 )
