@@ -43,6 +43,8 @@ Image data and lables should be stored in an npz with 'images' and 'labels' arra
 
 Details for our hyperparameters can be found here. <br />
 
+We trained each model for 300 epochs with early stopping (patience=5) using a batch size of 128. We used 128x128 size images for Malaria and Babesiosis and 224x224 size images for ALL and AML. Each model also used the Adam optimizer with an initial learning rate of 0.0001 for the first 50 epochs then multiplied by 0.1 after the 50th epoch and 75th epoch. In addition, the ReLU function was used with sigmoid/softmax functions and BCE/cross-entropy loss functions for binary/multi class problems
+
 **Topo-MLP**  <br />
 
 **Topo-Tr**  <br />
