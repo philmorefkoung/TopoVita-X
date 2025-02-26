@@ -1,7 +1,7 @@
 # TopoVitaX
 Code for the paper Diagnosis of Blood Diseases and Disorders with Topological Deep Learning <br />
 
-Our project explores the application of topological methods to improve biomedical image classification of rare blood disorders. We utilize topological data analysis in the form of Betti vectors to create more robust and accurate models to classify these disorders. <br /> 
+Our project explores the application of topological methods to improve single-cell image classification of rare blood diseases and disorders. We utilize topological data analysis in the form of Betti vectors to create more robust and accurate models to classify these diseases and disorders. <br /> 
 
 ## Table of Contents
 * [Installation](#installation)
