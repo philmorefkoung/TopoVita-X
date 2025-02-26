@@ -6,7 +6,7 @@ from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.metrics import AUC, Precision, Recall
 import pandas as pd 
 
-num_classes = 3 # 3 for NIAID Dataset, 5 for AML subtype classification
+num_classes = 3 # 3 for NIAID Dataset
 
 labels_train = to_categorical(labels_train, num_classes=num_classes)
 labels_val = to_categorical(labels_val, num_classes=num_classes)
@@ -26,10 +26,10 @@ val_dataset = val_dataset.batch(batch_size)
 test_dataset = test_dataset.batch(batch_size)
 
 # Load model
-base_model = tf.keras.applications.ResNet50(
+base_model = tf.keras.applications.ResNet50( # Swap between DenseNet121 and Xception backbones
     weights= 'imagenet',  # pretrained for full dataset, None for limited data setting
     include_top=False,   
-    input_shape=(128, 128, 3) # 128x128 for all multiclass datasets
+    input_shape=(128, 128, 3) # 128x128
 )
 
 # Freeze base model
