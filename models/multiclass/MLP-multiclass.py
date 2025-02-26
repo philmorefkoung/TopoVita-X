@@ -8,7 +8,7 @@ from tensorflow.keras.utils import to_categorical
 import numpy as np
 import pandas as pd
 
-num_classes = 3 # 3 for NIAID dataset, 5 for AML 5 class task
+num_classes = 3 
 
 labels_train = to_categorical(labels_train, num_classes=num_classes)
 labels_val = to_categorical(labels_val, num_classes=num_classes)
