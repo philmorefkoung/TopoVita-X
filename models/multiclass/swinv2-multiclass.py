@@ -6,7 +6,7 @@ import torchvision.transforms as transforms
 from sklearn.metrics import accuracy_score, precision_score, recall_score, roc_auc_score
 import pandas as pd
 
-num_classes = 3  # 3 for NIAID, 5 for AML subtype
+num_classes = 3  # 3 for NIAID
 
 # Convert arrays to PyTorch tensors
 labels_train = torch.tensor(labels_train, dtype=torch.long)
