@@ -43,6 +43,13 @@ Image data and lables should be stored in an npz with 'images' and 'labels' arra
 
 Details for our hyperparameters can be found here. <br />
 
+**Topo-MLP**  <br />
+
+**Topo-Tr**  <br />
+
+**DL**  <br />
+
+**Topo-DL**  <br />
 
 ## Data
 Due to file size limitations, we cannot provide the datasets in this repository. However, the links to the original datasets can be found below: <br />
