@@ -7,7 +7,7 @@ import numpy as np
 from tensorflow.keras.utils import to_categorical
 import pandas as pd 
 
-num_classes = 5  # 3 for NIAID, 5 for AML subtype
+num_classes = 5  # 3 for NIAID
 
 labels_train = to_categorical(labels_train, num_classes=num_classes)
 labels_val = to_categorical(labels_val, num_classes=num_classes)
@@ -34,7 +34,7 @@ class TabTransformer(nn.Module):
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model = TabTransformer(num_features=400, num_classes=num_classes).to(device)
 criterion = nn.CrossEntropyLoss() 
-optimizer = optim.Adam(model.parameters(), lr=0.001)
+optimizer = optim.Adam(model.parameters(), lr=0.0001)
 
 # Convert data to tensors
 X_train_tensor = torch.FloatTensor(betti_train.values).to(device)
@@ -52,11 +52,11 @@ val_loader = DataLoader(val_dataset, batch_size=128, shuffle=False)
 # Learning rate scheduler
 def lr_lambda(epoch):
     if epoch < 50:
-        return 0.1
+        return 1.0
     elif epoch < 75:
-        return 0.01
+        return 0.1
     else:
-        return 0.001
+        return 0.01
 
 scheduler = optim.lr_scheduler.LambdaLR(optimizer, lr_lambda)
 
