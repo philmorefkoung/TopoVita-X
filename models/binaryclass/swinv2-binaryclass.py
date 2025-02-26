@@ -50,7 +50,7 @@ test_loader = DataLoader(test_dataset, batch_size=128)
 model = timm.create_model(
     'swinv2_tiny_window8_256', 
     pretrained=True, # pretrained for full dataset only
-    img_size=128,  # 128x128 for all datasets except for ALL-IDB2 which is 224x224
+    img_size=128,  # 128x128 for all datasets except for ALL-IDB2 and AML which is 224x224
     patch_size=2,  # set patch size to 2 for 128x128 image and 4 for 224x224
     window_size=8,  # set window to 8 for 128x128 images and 7 for 224x224
     num_classes=2 
