@@ -15,7 +15,7 @@ class TSwinv2(nn.Module):
         self.vision_model = timm.create_model(
             'swinv2_tiny_window8_256',
             pretrained=True, # pretrained for full datasets only
-            img_size=128, # 128x128 for all datasets, 224x224 for ALL-IDB2
+            img_size=128, # 128x128 for all datasets, 224x224 for ALL-IDB2 and AML
             patch_size=2, # 2 for 128x128 images, 4 for 224x224
             window_size=8, # 8 for 128x128 images, 7 for 224x224
             num_classes=0
