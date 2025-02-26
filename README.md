@@ -6,6 +6,7 @@ Our project explores the application of topological methods to improve biomedica
 ## Table of Contents
 * [Installation](#installation)
 * [Usage](#usage)
+* [Hyperparameters](#hyperparameters)
 * [Data](#data)
 * [Results](#results)
 * [Acknowledgements](#acknowledgements)
@@ -38,6 +39,9 @@ labels_test = np.load('babesia-test.npz')['labels']
 Betti vectors should be provided in csv format and 400 dimensional in length <br />
 Image data and lables should be stored in an npz with 'images' and 'labels' array 
 
+## Hyperparameters
+
+Details for our hyperparameters can be found here. <br />
 
 
 ## Data
