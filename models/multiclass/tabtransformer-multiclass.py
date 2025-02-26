@@ -15,7 +15,7 @@ labels_test = to_categorical(labels_test, num_classes=num_classes)
 
 # TabTransformer for multiclass
 class TabTransformer(nn.Module):
-    def __init__(self, num_features, num_classes=num_classes, dim_embedding=128, num_heads=4, num_layers=5):  # 3 for NIAID, 5 for AML subtype
+    def __init__(self, num_features, num_classes=num_classes, dim_embedding=128, num_heads=4, num_layers=5):  
         super(TabTransformer, self).__init__()
         self.embedding = nn.Linear(num_features, dim_embedding)
         encoder_layer = nn.TransformerEncoderLayer(d_model=dim_embedding, nhead=num_heads, batch_first=True)
