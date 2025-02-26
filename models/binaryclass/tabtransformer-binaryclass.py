@@ -50,7 +50,7 @@ patience_counter = 0
 # learning rate scheduler
 def lr_lambda(epoch):
     if epoch < 50:
-        return 0.1  # 0.001 * 0.1 = 0.0001
+        return 1.0  # 0.0001 * 1.0 = 0.0001
     elif epoch < 75:
         return 0.01  # 0.001 * 0.01 = 0.00001
     else:
@@ -148,7 +148,7 @@ precision = precision_score(all_targets, all_predictions)
 recall = recall_score(all_targets, all_predictions)
 auc = roc_auc_score(all_targets, all_probs)
 
-# Print
+# Print metrics
 print(f'Test Accuracy: {accuracy:.4f}')
 print(f'Test AUC: {auc:.4f}')
 print(f'Test Precision: {precision:.4f}')
