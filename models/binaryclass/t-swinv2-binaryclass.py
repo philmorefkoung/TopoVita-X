@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import accuracy_score, precision_score, recall_score, roc_auc_score
 
-class HybridModel(nn.Module):
+class TSwinv2(nn.Module):
     def __init__(self, feature_dim=400, num_classes=1):  
         super().__init__()
         
@@ -62,6 +62,7 @@ class HybridModel(nn.Module):
             nn.BatchNorm1d(256),
             nn.ReLU(),
             nn.Dropout(0.25),
+            
             nn.Linear(256, 256),
             nn.BatchNorm1d(256),
             nn.ReLU(),
@@ -71,10 +72,11 @@ class HybridModel(nn.Module):
             nn.BatchNorm1d(256),
             nn.ReLU(),
             nn.Dropout(0.25),
+            
             nn.Linear(256, 1)
         )
 
-    def forward(self, images, features):
+    def forward(self, images, betti_features):
         vision_features = self.vision_model.forward_features(images)
         
         B, H, W, C = vision_features.shape
@@ -82,17 +84,17 @@ class HybridModel(nn.Module):
         vision_features = vision_features.mean(dim=1)
         
         vision_features = self.vision_projection(vision_features)
-        mlp_features = self.mlp(features)
+        mlp_features = self.mlp(betti_features)
         
         combined_features = torch.cat([vision_features, mlp_features], dim=1)
         
         output = self.fusion(combined_features)
         return output
 
-class HybridDataset(Dataset):
-    def __init__(self, images, features, labels, transform=None):
+class MultiModalDataset(Dataset):
+    def __init__(self, images, betti_features, labels, transform=None):
         self.images = images
-        self.features = features
+        self.betti_features = betti_features
         self.labels = labels
         self.transform = transform
     
@@ -101,13 +103,13 @@ class HybridDataset(Dataset):
     
     def __getitem__(self, idx):
         image = self.images[idx]
-        feature = self.features[idx]
+        betti_feature = self.betti_features[idx]
         label = self.labels[idx]
         
         if self.transform:
             image = self.transform(image)
             
-        return image, torch.tensor(feature, dtype=torch.float32), torch.tensor(label, dtype=torch.float32) 
+        return image, torch.tensor(betti_feature, dtype=torch.float32), torch.tensor(label, dtype=torch.float32) 
 
 def load_presplit_data(train_npz, val_npz, test_npz, 
                       train_csv, val_csv, test_csv, 
@@ -117,14 +119,16 @@ def load_presplit_data(train_npz, val_npz, test_npz,
     val_data = np.load(val_npz)
     test_data = np.load(test_npz)
     
-    train_features = pd.read_csv(train_csv).values
-    val_features = pd.read_csv(val_csv).values
-    test_features = pd.read_csv(test_csv).values
+    train_betti = pd.read_csv(train_csv).values
+    val_betti = pd.read_csv(val_csv).values
+    test_betti = pd.read_csv(test_csv).values
     
     train_images = train_data['images']
     train_labels = train_data['labels']
+                          
     val_images = val_data['images']
     val_labels = val_data['labels']
+                          
     test_images = test_data['images']
     test_labels = test_data['labels']
     
@@ -133,9 +137,9 @@ def load_presplit_data(train_npz, val_npz, test_npz,
         transforms.ToTensor(),
     ])
     
-    train_dataset = HybridDataset(train_images, train_features, train_labels, transform=transform)
-    val_dataset = HybridDataset(val_images, val_features, val_labels, transform=transform)
-    test_dataset = HybridDataset(test_images, test_features, test_labels, transform=transform)
+    train_dataset = MultiModalDataset(train_images, train_betti, train_labels, transform=transform)
+    val_dataset = MultiModalDataset(val_images, val_betti, val_labels, transform=transform)
+    test_dataset = MultiModalDataset(test_images, test_betti, test_labels, transform=transform)
     
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
     val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
@@ -143,7 +147,7 @@ def load_presplit_data(train_npz, val_npz, test_npz,
     
     return train_loader, val_loader, test_loader
 
-def train_hybrid_model(
+def train_model(
     model,
     train_loader,
     val_loader,
@@ -201,9 +205,9 @@ def train_hybrid_model(
         val_loss = 0.0
         
         with torch.no_grad():
-            for images, features, labels in val_loader:
+            for images, betti_features, labels in val_loader:
                 images = images.to(device)
-                features = features.to(device)
+                betti_features = betti_features.to(device)
                 labels = labels.to(device).view(-1, 1)
                 
                 outputs = model(images, features)
@@ -245,9 +249,9 @@ def train_hybrid_model(
     all_labels = []
     
     with torch.no_grad():
-        for images, features, labels in test_loader:
+        for images, betti_features, labels in test_loader:
             images = images.to(device)
-            features = features.to(device)
+            betti_features = betti_features.to(device)
             
             outputs = model(images, features)
             probs = torch.sigmoid(outputs).squeeze()  
@@ -271,7 +275,7 @@ def train_hybrid_model(
     return model, history, metrics
 
 if __name__ == "__main__":
-    model = HybridModel(feature_dim=400, num_classes=1)  
+    model = TSwinv2(feature_dim=400, num_classes=1)  
     
     train_loader, val_loader, test_loader = load_presplit_data(
         train_npz='train_npz_name.npz',
@@ -285,7 +289,7 @@ if __name__ == "__main__":
         batch_size=128
     )
     
-    trained_model, history, metrics = train_hybrid_model(
+    trained_model, history, metrics = train_model(
         model=model,
         train_loader=train_loader,
         val_loader=val_loader,
