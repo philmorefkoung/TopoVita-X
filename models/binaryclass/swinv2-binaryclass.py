@@ -7,13 +7,13 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, roc_a
 import pandas as pd
 
 # Convert arrays to PyTorch tensors
-labels_train = torch.tensor(labels_train, dtype=torch.long)
-labels_val = torch.tensor(labels_val, dtype=torch.long)
-labels_test = torch.tensor(labels_test, dtype=torch.long)
+labels_train = torch.tensor(labels_train, dtype=torch.float32)
+labels_val = torch.tensor(labels_val, dtype=torch.float32)
+labels_test = torch.tensor(labels_test, dtype=torch.float32)
 
-labels_train = torch.nn.functional.one_hot(labels_train, num_classes=2).float()
-labels_val = torch.nn.functional.one_hot(labels_val, num_classes=2).float()
-labels_test = torch.nn.functional.one_hot(labels_test, num_classes=2).float()
+labels_train = labels_train.unsqueeze(1)
+labels_val = labels_val.unsqueeze(1)
+labels_test = labels_test.unsqueeze(1)
 
 # PyTorch dataset
 class CustomDataset(Dataset):
@@ -53,7 +53,7 @@ model = timm.create_model(
     img_size=128,  # 128x128 for all datasets except for ALL-IDB2 and AML which is 224x224
     patch_size=2,  # set patch size to 2 for 128x128 image and 4 for 224x224
     window_size=8,  # set window to 8 for 128x128 images and 7 for 224x224
-    num_classes=2 
+    num_classes=1 
 )
 
 model = model.cuda()
