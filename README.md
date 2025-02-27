@@ -46,12 +46,13 @@ Details for our hyperparameters can be found here. <br />
 We trained each model for 300 epochs with early stopping (patience=5) using a batch size of 128. We used 128x128 size images for Malaria and Babesiosis and 224x224 size images for ALL and AML. Each model also used the Adam optimizer with an initial learning rate of 0.0001 for the first 50 epochs then multiplied by 0.1 after the 50th epoch and 75th epoch. In addition, the ReLU function was used with sigmoid/softmax functions and BCE/cross-entropy loss functions for binary/multi class problems
 
 **Topo-MLP**  <br />
-
+We use 3 hidden layers one with 256 units and 2 with 128 units. <br />
 **Topo-Tr**  <br />
-
-**DL**  <br />
-
+We use 4 heads and 5 layers with dimension embedding of 128. <br />
+**Baseline**  <br />
+We use a pooling layer followed by 3 hidden layers, 2 with 256 units and one with 128 units. <br />
 **Topo-DL**  <br />
+We use the same structure as our baseline CNN and MLP, our fusion block contains 2 hidden layers of 256 units each.  <br />
 
 ## Data
 Due to file size limitations, we cannot provide the datasets in this repository. However, the links to the original datasets can be found below: <br />
