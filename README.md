@@ -2,9 +2,9 @@
 
 Topological features and deep learning for blood-cell image classification.
 
-[Paper](https://www.medrxiv.org/content/10.1101/2025.01.21.25320908v1) · [Data](#data) · [Usage](#usage) · [Running guide](docs/REPRODUCIBILITY.md) · [Citation](#citation)
+[Paper](https://link.springer.com/chapter/10.1007/978-3-032-09513-8_44) · [Data](#data) · [Usage](#usage) · [Running guide](docs/REPRODUCIBILITY.md) · [Citation](#citation)
 
-Research code for **Diagnosis of Blood Diseases and Disorders with Topological Deep Learning**, by Philmore F. Koung, Saba Fatema, Nagehan Pakasticali, Hung S. Luu, and Baris Coskunuzer. The linked paper is the medRxiv preprint posted January 23, 2025.
+Research code for **Diagnosis of Blood Diseases and Disorders with Topological Deep Learning**, by Philmore Koung, Saba Fatema, Nagehan Pakasticali, Hung Luu, and Baris Coskunuzer. Published in *Machine Learning in Medical Imaging (MLMI 2025)*, Lecture Notes in Computer Science, volume 16241, pages 452–466, Springer, 2026.
 
 ## Overview
 
@@ -125,7 +125,7 @@ For other model families, consult the [script input table](docs/REPRODUCIBILITY.
 
 ## Results
 
-The figures below compare model accuracy and AUC. See the [paper](https://www.medrxiv.org/content/10.1101/2025.01.21.25320908v1) for experimental protocols and detailed results.
+The figures below compare model accuracy and AUC. See the [paper](https://link.springer.com/chapter/10.1007/978-3-032-09513-8_44) for experimental protocols and detailed results.
 
 ### Accuracy
 
@@ -140,13 +140,18 @@ The figures below compare model accuracy and AUC. See the [paper](https://www.me
 If you use this work, please cite the paper. GitHub's **Cite this repository** action is supported by [`CITATION.cff`](CITATION.cff).
 
 ```bibtex
-@article{koung2025diagnosis,
-  title   = {Diagnosis of Blood Diseases and Disorders with Topological Deep Learning},
-  author  = {Koung, Philmore F. and Fatema, Saba and Pakasticali, Nagehan and Luu, Hung S. and Coskunuzer, Baris},
-  journal = {medRxiv},
-  year    = {2025},
-  doi     = {10.1101/2025.01.21.25320908},
-  url     = {https://www.medrxiv.org/content/10.1101/2025.01.21.25320908v1}
+@inproceedings{koung2026diagnosis,
+  title     = {Diagnosis of Blood Diseases and Disorders with Topological Deep Learning},
+  author    = {Koung, Philmore and Fatema, Saba and Pakasticali, Nagehan and Luu, Hung and Coskunuzer, Baris},
+  booktitle = {Machine Learning in Medical Imaging},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {16241},
+  pages     = {452--466},
+  year      = {2026},
+  publisher = {Springer},
+  address   = {Cham},
+  doi       = {10.1007/978-3-032-09513-8_44},
+  url       = {https://link.springer.com/chapter/10.1007/978-3-032-09513-8_44}
 }
 ```
 
