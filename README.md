@@ -2,7 +2,7 @@
 
 Topological features and deep learning for blood-cell image classification.
 
-[Paper](https://www.medrxiv.org/content/10.1101/2025.01.21.25320908v1) · [Data](#data) · [Usage](#usage) · [Reproducibility](docs/REPRODUCIBILITY.md) · [Citation](#citation)
+[Paper](https://www.medrxiv.org/content/10.1101/2025.01.21.25320908v1) · [Data](#data) · [Usage](#usage) · [Running guide](docs/REPRODUCIBILITY.md) · [Citation](#citation)
 
 Research code for **Diagnosis of Blood Diseases and Disorders with Topological Deep Learning**, by Philmore F. Koung, Saba Fatema, Nagehan Pakasticali, Hung S. Luu, and Baris Coskunuzer. The linked paper is the medRxiv preprint posted January 23, 2025.
 
@@ -14,7 +14,7 @@ TopoVita-X combines persistent-homology descriptors with image-based models for 
 - **Image baselines:** CNNs and Swin Transformer V2.
 - **Hybrid models:** CNN and Swin V2 image representations fused with topological features.
 
-The code is organized as experiment scripts. Most expect data arrays loaded into their Python namespace; the hybrid Swin scripts contain editable file paths. See the [reproducibility guide](docs/REPRODUCIBILITY.md) for script conventions and implementation details that need attention before reproducing results.
+The code is organized as experiment scripts. Most expect data arrays loaded into their Python namespace; the hybrid Swin scripts contain editable file paths. See the [running guide](docs/REPRODUCIBILITY.md) for model configuration and script inputs.
 
 ## Repository map
 
@@ -25,7 +25,7 @@ The code is organized as experiment scripts. Most expect data arrays loaded into
 | [`models/multiclass/`](models/multiclass/) | Multiclass classification experiments |
 | [`plots/`](plots/) | Accuracy and AUC comparison figures |
 | [`requirements.txt`](requirements.txt) | Pinned Python dependencies |
-| [`docs/REPRODUCIBILITY.md`](docs/REPRODUCIBILITY.md) | Environment notes, script conventions, and known limitations |
+| [`docs/REPRODUCIBILITY.md`](docs/REPRODUCIBILITY.md) | Environment setup, script inputs, and model configuration |
 | [`CITATION.cff`](CITATION.cff) | Machine-readable paper citation |
 
 Each model directory contains `MLP-*`, `tabtransformer-*`, `CNN-*`, `T-CNN-*`, `swinv2-*`, and `t-swinv2-*` scripts. The `T-` / `t-` prefixes identify hybrid image-and-topology models.
@@ -48,11 +48,11 @@ python -m pip install -r requirements.txt
 python -m pip check
 ```
 
-The scripts use TensorFlow/Keras for CNN and MLP models, PyTorch/timm for transformer models, and giotto-tda/OpenCV for feature extraction. For NVIDIA CUDA 12.4, see the [GPU installation notes](docs/REPRODUCIBILITY.md#environment). Several original scripts assume CUDA; review device selection before running them on a CPU. Dependency resolution and experiment reproduction are separate checks.
+The scripts use TensorFlow/Keras for CNN and MLP models, PyTorch/timm for transformer models, and giotto-tda/OpenCV for feature extraction. For NVIDIA CUDA 12.4, see the [GPU installation notes](docs/REPRODUCIBILITY.md#environment). Set the selected script's device to match your CPU or GPU.
 
 ## Data
 
-Datasets and prepared train/validation/test splits are not distributed here. Obtain data from the original providers and follow their access terms.
+Obtain data from the original providers below and prepare train, validation, and test splits.
 
 | Dataset | Source |
 | --- | --- |
@@ -77,7 +77,7 @@ Keep image, label, and CSV row order identical. Labels must use the selected scr
 
 ## Usage
 
-Run these examples from the repository root after preparing your environment and data. They illustrate the script interfaces; they have not been used here to rerun the paper's experiments. The corrected binary transformer paths have a separate [tiny synthetic training/test check](docs/REPRODUCIBILITY.md#evaluation-corrections-and-checks).
+Run these examples from the repository root after preparing your environment and data.
 
 ### Extract Betti vectors
 
@@ -123,18 +123,9 @@ runpy.run_path("models/binaryclass/MLP-binaryclass.py", run_name="__main__", ini
 
 For other model families, consult the [script input table](docs/REPRODUCIBILITY.md#script-inputs). Configure class counts, image size, pretrained weights, and file paths before starting an experiment.
 
-### Quick execution check
-
-```bash
-python -m unittest discover -s tests -v
-python scripts/smoke_train_test.py --output outputs/smoke-results.json
-```
-
-This runs focused evaluation regressions and one CPU training step per binary transformer model on synthetic data. It uses the actual models without pretrained downloads; it does not measure diagnostic performance.
-
 ## Results
 
-Refer to the [paper](https://www.medrxiv.org/content/10.1101/2025.01.21.25320908v1) for experimental protocols and reported results. These are the comparison plots included in this repository, not new benchmark runs.
+The figures below compare model accuracy and AUC. See the [paper](https://www.medrxiv.org/content/10.1101/2025.01.21.25320908v1) for experimental protocols and detailed results.
 
 ### Accuracy
 
@@ -159,8 +150,6 @@ If you use this work, please cite the paper. GitHub's **Cite this repository** a
 }
 ```
 
-## Acknowledgements and license
+## Acknowledgements
 
 We thank the dataset creators and the developers of the scientific Python libraries used in this work. Please also cite the datasets and methods relevant to your experiments.
-
-This repository does not currently include a code license. The preprint's license does not establish a license for the repository code.
