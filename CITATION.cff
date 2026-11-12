@@ -1,0 +1,44 @@
+cff-version: 1.2.0
+message: "If you use this repository, please cite the paper below."
+type: software
+title: "TopoVita-X"
+url: "https://github.com/philmorefkoung/TopoVita-X"
+repository-code: "https://github.com/philmorefkoung/TopoVita-X"
+authors:
+  - family-names: Koung
+    given-names: Philmore
+  - family-names: Fatema
+    given-names: Saba
+  - family-names: Pakasticali
+    given-names: Nagehan
+  - family-names: Luu
+    given-names: Hung
+  - family-names: Coskunuzer
+    given-names: Baris
+preferred-citation:
+  type: conference-paper
+  title: "Diagnosis of Blood Diseases and Disorders with Topological Deep Learning"
+  authors:
+    - family-names: Koung
+      given-names: Philmore
+    - family-names: Fatema
+      given-names: Saba
+    - family-names: Pakasticali
+      given-names: Nagehan
+    - family-names: Luu
+      given-names: Hung
+    - family-names: Coskunuzer
+      given-names: Baris
+  collection-title: "Machine Learning in Medical Imaging"
+  collection-type: proceedings
+  volume: 16241
+  start: 452
+  end: 466
+  year: 2026
+  date-published: 2026-01-02
+  publisher:
+    name: Springer
+    city: Cham
+  doi: "10.1007/978-3-032-09513-8_44"
+  url: "https://link.springer.com/chapter/10.1007/978-3-032-09513-8_44"
+  notes: "MLMI 2025; Lecture Notes in Computer Science. Philmore Koung and Saba Fatema contributed equally."
