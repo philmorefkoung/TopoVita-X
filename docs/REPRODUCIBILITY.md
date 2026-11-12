@@ -33,14 +33,14 @@ The model scripts are experiment templates rather than a packaged API or a unifi
 | Model family | Variables or configuration required before execution |
 | --- | --- |
 | `MLP-*` | `betti_train`, `betti_val`, `betti_test`, and matching `labels_*` arrays |
-| `tabtransformer-*` | The same variables; Betti features must be pandas DataFrames because the scripts access `.values` |
+| `tabtransformer-*` | The same variables; multiclass requires pandas DataFrames, while the binary runner also accepts NumPy arrays |
 | `CNN-*` | `image_train`, `image_val`, `image_test`, and matching `labels_*` arrays |
 | `T-CNN-*` | Image arrays, Betti DataFrames, and matching label arrays |
 | `swinv2-*` | Image and label arrays; inspect CUDA device selection in the script |
 | `t-swinv2-*` | Edit the six NPZ/CSV paths in the `__main__` block; set class count and image configuration in `TSwinv2` |
 | `BettiVectorization.py` | Call `generate_betti_vectors(images)` with an image array in BGR order |
 
-For the scripts using preloaded arrays, the README's `runpy.run_path(..., init_globals=...)` pattern supplies the expected variables without changing their source. It does not validate a model's training or evaluation logic.
+For scripts using preloaded arrays, the README's `runpy.run_path(..., run_name="__main__", init_globals=...)` pattern supplies the expected variables. The binary tabular transformer now exposes importable `run_experiment`, `train_model`, and `evaluate` functions. To execute its experiment through `runpy`, use `runpy.run_path("models/binaryclass/tabtransformer-binaryclass.py", run_name="__main__", init_globals=inputs)`. Importing that file alone does not start training.
 
 ## Feature conventions
 
@@ -62,11 +62,29 @@ Review these items before interpreting a new run as a reproduction:
 - **Model defaults:** multiclass scripts often set `num_classes=3`. CNN and Swin image sizes are configured in source; changing only the dataset files does not adjust the model. Pretrained models may download weights on first use.
 - **Epoch limits:** several scripts use 300 epochs, while the multiclass hybrid Swin entry point requests 100. Inspect each script's settings rather than assuming one shared configuration.
 - **Learning-rate schedules:** the binary tabular transformer uses multipliers `1.0`, `0.01`, and `0.001`; several other scripts use `1.0`, `0.1`, and `0.01`. These are existing implementation differences.
-- **Binary hybrid Swin:** in [`t-swinv2-binaryclass.py`](../models/binaryclass/t-swinv2-binaryclass.py), validation and test loops load `betti_features` but call the model with `features` left over from training. That can mispair images and features or cause a batch-size error. Correct and validate the evaluation path before using its metrics.
-- **Binary tabular transformer:** [`tabtransformer-binaryclass.py`](../models/binaryclass/tabtransformer-binaryclass.py) appends test predictions to the lists from the last validation pass without clearing them. Its final metrics therefore combine validation and test samples. Reset these accumulators and validate evaluation before reporting test performance.
 - **Checkpoint outputs:** multiple scripts write `best_model.pth` or `best_hybrid_model.pth` in the working directory. Use a separate run directory or preserve these files before another experiment overwrites them.
 
-These observations document the released implementation; they do not establish whether the same issues affected the experiments reported in the paper. The documentation cleanup does not modify model or evaluation behavior.
+## Evaluation corrections and checks
+
+The binary evaluation paths include these corrections:
+
+- [`t-swinv2-binaryclass.py`](../models/binaryclass/t-swinv2-binaryclass.py) now pairs each validation/test image batch with that batch's topological features. Previously it reused features from the final training batch. Test logits retain a one-dimensional sample axis when the final batch contains one sample.
+- [`tabtransformer-binaryclass.py`](../models/binaryclass/tabtransformer-binaryclass.py) now evaluates each split with fresh prediction accumulators. Previously its test metrics included the final validation predictions. Its model architecture, default optimizer, and learning-rate schedule are preserved.
+- Training and evaluation losses in these binary paths are averaged over samples, so a partial final batch has its proper weight. This can change validation-based checkpoint selection when batch sizes differ.
+- Both binary training functions accept a `checkpoint_path`. Binary hybrid Swin accepts `pretrained=False` to run without downloading weights; the experiment default remains `True`.
+
+The multiclass counterparts already use the current batch's features and separate test accumulators. These code corrections do not establish whether the earlier issues affected the experiments reported in the paper. Rerun experiments before comparing corrected results with published values.
+
+Run the focused regression checks and a tiny synthetic training/evaluation check with:
+
+```bash
+python -m unittest discover -s tests -v
+python scripts/smoke_train_test.py --output outputs/smoke-results.json
+```
+
+The two regression checks verify that held-out tabular metrics exclude validation samples, that hybrid images remain paired with their features in every split, and that a singleton final test batch is handled. The smoke script trains the actual default binary TabTransformer and Swin-V2 Tiny hybrid for one CPU optimizer step each, using 2 training samples, 2 validation samples, and 3 separate test samples. It downloads no data or pretrained weights and removes its temporary checkpoints.
+
+The smoke run completed with finite losses and metrics, exactly 3 test predictions per model, successful checkpoint reload, and parameter updates in the tabular classifier and both hybrid branches. The runtime used torch 2.11.0+cu128, torchvision 0.26.0+cu128, timm 0.9.16, NumPy 2.2.6, pandas 2.3.3, and scikit-learn 1.7.2, running on CPU with two threads. These versions differ from `requirements.txt`; this is an execution check of the corrected model paths, not validation of every pinned package or reproduction of diagnostic performance.
 
 ## Recording a reproduction
 

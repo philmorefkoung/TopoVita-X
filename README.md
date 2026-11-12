@@ -77,7 +77,7 @@ Keep image, label, and CSV row order identical. Labels must use the selected scr
 
 ## Usage
 
-Run these examples from the repository root after preparing your environment and data. They illustrate the script interfaces; they have not been used here to rerun the paper's experiments.
+Run these examples from the repository root after preparing your environment and data. They illustrate the script interfaces; they have not been used here to rerun the paper's experiments. The corrected binary transformer paths have a separate [tiny synthetic training/test check](docs/REPRODUCIBILITY.md#evaluation-corrections-and-checks).
 
 ### Extract Betti vectors
 
@@ -118,10 +118,19 @@ for split in ("train", "val", "test"):
     inputs[f"labels_{split}"] = labels
     inputs[f"betti_{split}"] = betti
 
-runpy.run_path("models/binaryclass/MLP-binaryclass.py", init_globals=inputs)
+runpy.run_path("models/binaryclass/MLP-binaryclass.py", run_name="__main__", init_globals=inputs)
 ```
 
 For other model families, consult the [script input table](docs/REPRODUCIBILITY.md#script-inputs). Configure class counts, image size, pretrained weights, and file paths before starting an experiment.
+
+### Quick execution check
+
+```bash
+python -m unittest discover -s tests -v
+python scripts/smoke_train_test.py --output outputs/smoke-results.json
+```
+
+This runs focused evaluation regressions and one CPU training step per binary transformer model on synthetic data. It uses the actual models without pretrained downloads; it does not measure diagnostic performance.
 
 ## Results
 

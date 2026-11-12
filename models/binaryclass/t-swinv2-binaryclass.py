@@ -8,13 +8,13 @@ import pandas as pd
 from sklearn.metrics import accuracy_score, precision_score, recall_score, roc_auc_score
 
 class TSwinv2(nn.Module):
-    def __init__(self, feature_dim=400, num_classes=1):  
+    def __init__(self, feature_dim=400, num_classes=1, pretrained=True):
         super().__init__()
         
         # Vision Transformer branch
         self.vision_model = timm.create_model(
             'swinv2_tiny_window8_256',
-            pretrained=True, # pretrained for full datasets only
+            pretrained=pretrained, # False avoids downloading pretrained weights
             img_size=128, # 128x128 for all datasets, 224x224 for ALL-IDB2 and AML
             patch_size=2, # 2 for 128x128 images, 4 for 224x224
             window_size=8, # 8 for 128x128 images, 7 for 224x224
@@ -155,8 +155,11 @@ def train_model(
     num_epochs=100,
     learning_rate=1e-4,
     patience=5,
-    device='cuda'
+    device='cuda',
+    checkpoint_path='best_hybrid_model.pth'
 ):
+    if num_epochs < 1 or len(train_loader) == 0:
+        raise ValueError("Training requires a positive epoch count and non-empty data.")
     model = model.to(device)
     
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
@@ -185,24 +188,27 @@ def train_model(
     for epoch in range(num_epochs):
         model.train()
         train_loss = 0.0
+        train_samples = 0
         
-        for images, features, labels in train_loader:
+        for images, betti_features, labels in train_loader:
             images = images.to(device)
-            features = features.to(device)
+            betti_features = betti_features.to(device)
             labels = labels.to(device).view(-1, 1) 
             
             optimizer.zero_grad()
-            outputs = model(images, features)
+            outputs = model(images, betti_features)
             loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()
             
-            train_loss += loss.item()
+            train_loss += loss.item() * labels.shape[0]
+            train_samples += labels.shape[0]
         
-        train_loss /= len(train_loader)
+        train_loss /= train_samples
         
         model.eval()
         val_loss = 0.0
+        val_samples = 0
         
         with torch.no_grad():
             for images, betti_features, labels in val_loader:
@@ -210,11 +216,14 @@ def train_model(
                 betti_features = betti_features.to(device)
                 labels = labels.to(device).view(-1, 1)
                 
-                outputs = model(images, features)
+                outputs = model(images, betti_features)
                 loss = criterion(outputs, labels)
-                val_loss += loss.item()
+                val_loss += loss.item() * labels.shape[0]
+                val_samples += labels.shape[0]
         
-        val_loss /= len(val_loader)
+        if val_samples == 0:
+            raise ValueError("Validation requires a non-empty split.")
+        val_loss /= val_samples
         
         history['train_loss'].append(train_loss)
         history['val_loss'].append(val_loss)
@@ -230,7 +239,7 @@ def train_model(
             best_val_loss = val_loss
             patience_counter = 0
             best_model_state = model.state_dict().copy()
-            torch.save(best_model_state, "best_hybrid_model.pth")
+            torch.save(best_model_state, checkpoint_path)
         else:
             patience_counter += 1
             print(f"No improvement for {patience_counter} epochs")
@@ -241,7 +250,7 @@ def train_model(
         
         scheduler.step()
     
-    model.load_state_dict(torch.load("best_hybrid_model.pth"))
+    model.load_state_dict(torch.load(checkpoint_path, map_location=device, weights_only=True))
     
     model.eval()
     all_probs = []
@@ -253,13 +262,13 @@ def train_model(
             images = images.to(device)
             betti_features = betti_features.to(device)
             
-            outputs = model(images, features)
-            probs = torch.sigmoid(outputs).squeeze()  
+            outputs = model(images, betti_features)
+            probs = torch.sigmoid(outputs).reshape(-1)
             preds = (probs > 0.5).float()
             
             all_probs.extend(probs.cpu().numpy())
             all_preds.extend(preds.cpu().numpy())
-            all_labels.extend(labels.cpu().numpy())
+            all_labels.extend(labels.cpu().numpy().reshape(-1))
     
     all_probs = np.array(all_probs)
     all_preds = np.array(all_preds)
@@ -267,9 +276,10 @@ def train_model(
     
     metrics = {
         'accuracy': accuracy_score(all_labels, all_preds),
-        'precision': precision_score(all_labels, all_preds),
-        'recall': recall_score(all_labels, all_preds),
-        'auc': roc_auc_score(all_labels, all_probs)
+        'precision': precision_score(all_labels, all_preds, zero_division=0),
+        'recall': recall_score(all_labels, all_preds, zero_division=0),
+        'auc': roc_auc_score(all_labels, all_probs),
+        'n_samples': len(all_labels),
     }
     
     return model, history, metrics
