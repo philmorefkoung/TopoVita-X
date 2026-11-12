@@ -1,0 +1,36 @@
+cff-version: 1.2.0
+message: "If you use this repository, please cite the paper below."
+type: software
+title: "TopoVita-X"
+url: "https://github.com/philmorefkoung/TopoVita-X"
+repository-code: "https://github.com/philmorefkoung/TopoVita-X"
+authors:
+  - family-names: Koung
+    given-names: Philmore F.
+  - family-names: Fatema
+    given-names: Saba
+  - family-names: Pakasticali
+    given-names: Nagehan
+  - family-names: Luu
+    given-names: Hung S.
+  - family-names: Coskunuzer
+    given-names: Baris
+preferred-citation:
+  type: article
+  title: "Diagnosis of Blood Diseases and Disorders with Topological Deep Learning"
+  authors:
+    - family-names: Koung
+      given-names: Philmore F.
+    - family-names: Fatema
+      given-names: Saba
+    - family-names: Pakasticali
+      given-names: Nagehan
+    - family-names: Luu
+      given-names: Hung S.
+    - family-names: Coskunuzer
+      given-names: Baris
+  journal: medRxiv
+  year: 2025
+  date-published: 2025-01-23
+  doi: "10.1101/2025.01.21.25320908"
+  url: "https://www.medrxiv.org/content/10.1101/2025.01.21.25320908v1"

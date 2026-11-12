@@ -122,7 +122,3 @@ def generate_betti_vectors(images):
                           betti1_green], 
                           axis = 1)
     return combined
-
-# takes image array 
-betti_vectors = generate_betti_vectors(images)
-betti_vectors
